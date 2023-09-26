@@ -7,7 +7,6 @@ from collections import defaultdict
 from datetime import datetime
 
 def downloadData(url):
-    """Downloads the data or reads from a local file"""
     if os.path.exists(url):
         with open(url, 'r') as file:
             return file.read()
@@ -16,7 +15,6 @@ def downloadData(url):
         return response.read().decode('utf-8')
 
 def processData(file_content):
-    """Processes the CSV data"""
     data = []
     lines = file_content.splitlines()
     reader = csv.reader(lines)
@@ -25,11 +23,11 @@ def processData(file_content):
     return data
 
 def count_image_hits(data):
-    image_pattern = re.compile(r"\\.(jpg|gif|png)$", re.I)
+    image_pattern = re.compile(r"\.(jpg|gif|png)$", re.I)
     image_count = sum(1 for row in data if image_pattern.search(row[0]))
     total_count = len(data)
     image_percentage = (image_count / total_count) * 100
-    return image_count, image_percentage
+    return image_percentage
 
 def popular_browser(data):
     browsers_patterns = {
@@ -43,9 +41,7 @@ def popular_browser(data):
     for row in data:
         user_agent = row[2]
         for browser, pattern in browsers_patterns.items():
-            if pattern.search(user_agent) and browser != "Safari":
-                if browser == "Chrome" and browsers_patterns["Safari"].search(user_agent):
-                    continue
+            if pattern.search(user_agent):
                 browser_counts[browser] += 1
                 break
     most_popular = max(browser_counts, key=browser_counts.get)
@@ -69,7 +65,7 @@ def main(url):
     file_content = downloadData(url)
     weblog_data = processData(file_content)
 
-    image_hits, image_percentage = count_image_hits(weblog_data)
+    image_percentage = count_image_hits(weblog_data)
     print(f"Image requests account for {image_percentage:.2f}% of all requests.")
 
     most_pop_browser, browser_counts = popular_browser(weblog_data)
@@ -81,7 +77,7 @@ def main(url):
         hour_12 = hour % 12
         hour_12 = 12 if hour_12 == 0 else hour_12 
         print(f"Hour {hour:02} (24-hour) / {hour_12} {am_pm} (12-hour) has {hits} hits.")
-
+        
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", help="Path to the datafile or URL", type=str, required=True)
