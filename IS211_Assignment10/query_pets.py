@@ -2,12 +2,10 @@
 import sqlite3
 
 def query_data(db_path):
-    # Connect to the SQLite database
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     while True:
-        # Ask the user for a person's ID number
         person_id = input("Please enter a person's ID number or '-1' to exit: ")
         if person_id == '-1':
             break
@@ -17,8 +15,6 @@ def query_data(db_path):
         except ValueError:
             print("ID must be a number.")
             continue
-
-        # Query the database for the person and their pets
         cursor.execute("SELECT * FROM person WHERE id = ?", (person_id,))
         person_data = cursor.fetchone()
 
@@ -26,7 +22,6 @@ def query_data(db_path):
             first_name, last_name, age = person_data[1:4]
             print(f"{first_name} {last_name}, {age} years old")
 
-            # Query for the person's pets
             cursor.execute('''
             SELECT pet.name, pet.breed, pet.age, pet.dead
             FROM pet
@@ -42,10 +37,8 @@ def query_data(db_path):
         else:
             print("Person not found.")
 
-    # Close the connection to the database
     conn.close()
 
 if __name__ == "__main__":
-    # Path to the SQLite database
     db_path = "pets.db"
     query_data(db_path)
