@@ -26,7 +26,7 @@
             margin: 10px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
-            box-sizing: border-box; /* Ensures padding doesn't affect overall width */
+            box-sizing: border-box; 
         }
         .form-submit {
             width: 100%;
@@ -57,10 +57,17 @@
     <div class="quiz-form-container">
         <h2>Add New Quiz</h2>
         <form action="/add_quiz" method="post">
-            <input type="text" id="subject" name="subject" class="form-input" placeholder="Subject" required>
-            <input type="number" id="num_questions" name="num_questions" class="form-input" placeholder="Number of Questions" required>
-            <input type="date" id="quiz_date" name="quiz_date" class="form-input" required>
+            <input type="text" id="subject" name="subject" class="form-input" placeholder="Subject" required 
+                   oninvalid="this.setCustomValidity('Please enter the subject')"
+                   oninput="this.setCustomValidity('')">
+            <input type="number" id="num_questions" name="num_questions" class="form-input" placeholder="Number of Questions" required 
+                   oninvalid="this.setCustomValidity('Please enter the number of questions')"
+                   oninput="this.setCustomValidity('')">
+            <input type="date" id="quiz_date" name="quiz_date" class="form-input" required 
+                   oninvalid="this.setCustomValidity('Please enter the quiz date')"
+                   oninput="this.setCustomValidity('')">
             <input type="submit" value="Add Quiz" class="form-submit">
+            <input type="reset" value="Clear" class="form-submit"> 
         </form>
         <a href="/dashboard" class="back-link">Back to Dashboard</a>
     </div>

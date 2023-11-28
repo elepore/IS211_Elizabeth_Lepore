@@ -1,25 +1,26 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import hashlib
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hw13.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'secret_key'
-
 db = SQLAlchemy(app)
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
+    results = db.relationship('Result', backref='student', lazy=True, cascade="all, delete-orphan")
 
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String, nullable=False)
     num_questions = db.Column(db.Integer, nullable=False)
     quiz_date = db.Column(db.Date, nullable=False)
+    results = db.relationship('Result', backref='quiz', lazy=True, cascade="all, delete-orphan")
 
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -56,9 +57,9 @@ def dashboard():
 def student_results(student_id):
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    student = Student.query.get(student_id)
+    student = Student.query.get_or_404(student_id)
     results = db.session.query(Result, Quiz).join(Quiz).filter(Result.student_id == student_id).all()
-    return render_template('results.html', student=student, results=results)
+    return render_template('student_results.html', student=student, results=results)
 
 @app.route('/add_student', methods=['GET', 'POST'])
 def add_student():
@@ -105,29 +106,52 @@ def results():
 
 @app.route('/delete_student/<int:student_id>', methods=['POST'])
 def delete_student(student_id):
-    student = Student.query.get(student_id)
-    if student:
-        db.session.delete(student)
-        db.session.commit()
-        flash('Student deleted successfully.')
-    else:
-        flash('Student not found.')
+    student = Student.query.get_or_404(student_id)
+    db.session.delete(student)
+    db.session.commit()
+    flash('Student deleted successfully.')
     return redirect(url_for('dashboard'))
 
 @app.route('/delete_quiz/<int:quiz_id>', methods=['POST'])
 def delete_quiz(quiz_id):
-    quiz = Quiz.query.get(quiz_id)
-    if quiz:
-        db.session.delete(quiz)
-        db.session.commit()
-        flash('Quiz deleted successfully.')
-    else:
-        flash('Quiz not found.')
+    quiz = Quiz.query.get_or_404(quiz_id)
+    db.session.delete(quiz)
+    db.session.commit()
+    flash('Quiz deleted successfully.')
     return redirect(url_for('dashboard'))
+
+@app.route('/public_results')
+def public_results():
+    results = Result.query.all()
+    return render_template('public_results.html', results=results)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+def load_initial_data():
+    with app.app_context():
+        if not Student.query.first():
+            new_student = Student(first_name='John', last_name='Smith')
+            db.session.add(new_student)
+
+        if not Quiz.query.first():
+            new_quiz = Quiz(subject='Python Basics', num_questions=5, quiz_date=datetime(2015, 2, 5))
+            db.session.add(new_quiz)
+
+        db.session.commit()
+
+        student = Student.query.filter_by(first_name='John', last_name='Smith').first()
+        quiz = Quiz.query.filter_by(subject='Python Basics').first()
+        if student and quiz and not Result.query.filter_by(student_id=student.id, quiz_id=quiz.id).first():
+            new_result = Result(student_id=student.id, quiz_id=quiz.id, score=85)
+            db.session.add(new_result)
+            db.session.commit()
 
 def initialize_database():
     with app.app_context():
         db.create_all()
+        load_initial_data()
 
 if __name__ == '__main__':
     initialize_database()

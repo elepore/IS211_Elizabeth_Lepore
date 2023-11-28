@@ -57,6 +57,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="results-form-container">
         <h2>Add Quiz Result</h2>
@@ -64,20 +65,23 @@
             <label for="student_id">Student:</label>
             <select id="student_id" name="student_id" class="form-select">
                 {% for student in students %}
-                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
                 {% endfor %}
             </select>
             <label for="quiz_id">Quiz:</label>
             <select id="quiz_id" name="quiz_id" class="form-select">
                 {% for quiz in quizzes %}
-                    <option value="{{ quiz.id }}">{{ quiz.subject }}</option>
+                <option value="{{ quiz.id }}">{{ quiz.subject }}</option>
                 {% endfor %}
             </select>
-            <label for="score">Score:</label>
-            <input type="number" id="score" name="score" class="form-input">
+            <label for="score">Score (out of 100):</label>
+            <input type="number" id="score" name="score" class="form-input" required 
+                   min="0" max="100" 
+                   oninvalid="this.setCustomValidity('Please enter a valid score between 0 and 100')"
+                   oninput="this.setCustomValidity('')">
             <input type="submit" value="Add Result" class="form-submit">
         </form>
-        <a href="/" class="back-link">Back to Dashboard</a>
+        <a href="/dashboard" class="back-link">Back to Dashboard</a>
     </div>
 </body>
 </html>

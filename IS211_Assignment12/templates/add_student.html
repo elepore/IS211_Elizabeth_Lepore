@@ -58,10 +58,15 @@
         <h2>Add New Student</h2>
         <form action="/add_student" method="post">
             <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" class="form-input" required>
+            <input type="text" id="first_name" name="first_name" class="form-input" required 
+                   oninvalid="this.setCustomValidity('Please enter the first name')"
+                   oninput="this.setCustomValidity('')">
             <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" class="form-input" required>
+            <input type="text" id="last_name" name="last_name" class="form-input" required 
+                   oninvalid="this.setCustomValidity('Please enter the last name')"
+                   oninput="this.setCustomValidity('')">
             <input type="submit" value="Add Student" class="form-submit">
+            <input type="reset" value="Clear" class="form-submit"> 
         </form>
         <a href="/" class="back-link">Back to Dashboard</a>
     </div>

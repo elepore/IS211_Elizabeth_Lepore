@@ -54,8 +54,8 @@
 <body>
     <div class="container">
         <h2>Dashboard</h2>
-        <a href="/student" class="link-button">Add Student</a>
-        <a href="/quiz" class="link-button">Add Quiz</a>
+        <a href="/add_student" class="link-button">Add Student</a>
+        <a href="/add_quiz" class="link-button">Add Quiz</a>
         <a href="/results" class="link-button">Add Quiz Result</a>
 
         <h2>Students</h2>
@@ -64,13 +64,18 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Results</th>
+                <th>Action</th> 
             </tr>
-            <!-- Template tag for students will be dynamically populated here -->
             {% for student in students %}
             <tr>
                 <td>{{ student.id }}</td>
                 <td>{{ student.first_name }} {{ student.last_name }}</td>
                 <td><a href="/student/{{ student.id }}">View Results</a></td>
+                <td>
+                    <form action="/delete_student/{{ student.id }}" method="post">
+                        <input type="submit" value="Delete" />
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </table>
@@ -82,14 +87,19 @@
                 <th>Subject</th>
                 <th>Questions</th>
                 <th>Date</th>
+                <th>Action</th> 
             </tr>
-            <!-- Template tag for quizzes will be dynamically populated here -->
             {% for quiz in quizzes %}
             <tr>
                 <td>{{ quiz.id }}</td>
                 <td>{{ quiz.subject }}</td>
-                <td>{{ quiz.number_of_questions }}</td>
-                <td>{{ quiz.date }}</td>
+                <td>{{ quiz.num_questions }}</td>
+                <td>{{ quiz.quiz_date }}</td>
+                <td>
+                    <form action="/delete_quiz/{{ quiz.id }}" method="post">
+                        <input type="submit" value="Delete" />
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </table>
