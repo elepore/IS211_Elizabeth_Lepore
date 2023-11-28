@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Quiz</title>
+</head>
+<body>
+    <h2>Add New Quiz</h2>
+    <form action="/add_quiz" method="post">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject">
+        <label for="num_questions">Number of Questions:</label>
+        <input type="number" id="num_questions" name="num_questions">
+        <label for="quiz_date">Quiz Date:</label>
+        <input type="date" id="quiz_date" name="quiz_date">
+        <input type="submit" value="Add Quiz">
+    </form>
+    <a href="/">Back to Dashboard</a>
+</body>
+</html>
