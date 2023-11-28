@@ -2,26 +2,82 @@
 <html>
 <head>
     <title>Quiz Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .results-form-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px 0;
+        }
+        .form-select, .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        .form-submit {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-submit:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Add Quiz Result</h2>
-    <form action="/results" method="post">
-        <label for="student_id">Student:</label>
-        <select id="student_id" name="student_id">
-            {% for student in students %}
-                <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-            {% endfor %}
-        </select>
-        <label for="quiz_id">Quiz:</label>
-        <select id="quiz_id" name="quiz_id">
-            {% for quiz in quizzes %}
-                <option value="{{ quiz.id }}">{{ quiz.subject }}</option>
-            {% endfor %}
-        </select>
-        <label for="score">Score:</label>
-        <input type="number" id="score" name="score">
-        <input type="submit" value="Add Result">
-    </form>
-    <a href="/">Back to Dashboard</a>
+    <div class="results-form-container">
+        <h2>Add Quiz Result</h2>
+        <form action="/results" method="post">
+            <label for="student_id">Student:</label>
+            <select id="student_id" name="student_id" class="form-select">
+                {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+            <label for="quiz_id">Quiz:</label>
+            <select id="quiz_id" name="quiz_id" class="form-select">
+                {% for quiz in quizzes %}
+                    <option value="{{ quiz.id }}">{{ quiz.subject }}</option>
+                {% endfor %}
+            </select>
+            <label for="score">Score:</label>
+            <input type="number" id="score" name="score" class="form-input">
+            <input type="submit" value="Add Result" class="form-submit">
+        </form>
+        <a href="/" class="back-link">Back to Dashboard</a>
+    </div>
 </body>
 </html>

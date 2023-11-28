@@ -27,8 +27,13 @@ class Result(db.Model):
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
     score = db.Column(db.Integer, nullable=False)
 
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = hashlib.sha256(request.form['password'].encode()).hexdigest()
@@ -36,8 +41,8 @@ def login():
             session['logged_in'] = True
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid credentials. Please try again.')
-    return render_template('login.html')
+            error = 'Invalid credentials. Please try again.'
+    return render_template('login.html', error=error)
 
 @app.route('/dashboard')
 def dashboard():
@@ -53,7 +58,7 @@ def student_results(student_id):
         return redirect(url_for('login'))
     student = Student.query.get(student_id)
     results = db.session.query(Result, Quiz).join(Quiz).filter(Result.student_id == student_id).all()
-    return render_template('student_results.html', student=student, results=results)
+    return render_template('results.html', student=student, results=results)
 
 @app.route('/add_student', methods=['GET', 'POST'])
 def add_student():

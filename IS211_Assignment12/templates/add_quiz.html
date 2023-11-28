@@ -2,18 +2,67 @@
 <html>
 <head>
     <title>Add Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .quiz-form-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box; /* Ensures padding doesn't affect overall width */
+        }
+        .form-submit {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-submit:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h2>Add New Quiz</h2>
-    <form action="/add_quiz" method="post">
-        <label for="subject">Subject:</label>
-        <input type="text" id="subject" name="subject">
-        <label for="num_questions">Number of Questions:</label>
-        <input type="number" id="num_questions" name="num_questions">
-        <label for="quiz_date">Quiz Date:</label>
-        <input type="date" id="quiz_date" name="quiz_date">
-        <input type="submit" value="Add Quiz">
-    </form>
-    <a href="/">Back to Dashboard</a>
+    <div class="quiz-form-container">
+        <h2>Add New Quiz</h2>
+        <form action="/add_quiz" method="post">
+            <input type="text" id="subject" name="subject" class="form-input" placeholder="Subject" required>
+            <input type="number" id="num_questions" name="num_questions" class="form-input" placeholder="Number of Questions" required>
+            <input type="date" id="quiz_date" name="quiz_date" class="form-input" required>
+            <input type="submit" value="Add Quiz" class="form-submit">
+        </form>
+        <a href="/dashboard" class="back-link">Back to Dashboard</a>
+    </div>
 </body>
 </html>
