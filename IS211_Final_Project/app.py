@@ -10,6 +10,10 @@ app = Flask(__name__)
 app.permanent_session_lifetime = timedelta(minutes=30)
 app.secret_key = os.urandom(16)  
 
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
 @app.route('/register', methods=['POST'])
 def register():
     username = request.form['new_username']
