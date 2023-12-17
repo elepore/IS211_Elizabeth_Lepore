@@ -1,18 +1,67 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Book</title>
-    <!-- Reusing the style from Home page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 50%;
+            padding: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <!-- Reusing the navigation bar from Home page -->
-    <h1>Add a New Book</h1>
-    <form method="post">
-        ISBN: <input type="text" name="isbn"><br>
-        <input type="submit" value="Add Book">
-    </form>
+    <div class="container">
+        <h1>Add a New Book</h1>
+        <form method="post">
+            <input type="text" name="isbn" placeholder="Enter ISBN" required>
+            <input type="submit" value="Add Book">
+        </form>
+        <button onclick="location.href='/'" class="back-button">Back to Home</button>
+    </div>
 </body>
 </html>
