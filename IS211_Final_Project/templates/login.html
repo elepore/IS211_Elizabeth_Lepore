@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             align-items: center;
             height: 100vh;
         }
+
         .login-container {
             background-color: white;
             padding: 40px;
@@ -23,10 +25,12 @@
             width: 300px;
             text-align: center;
         }
+
         h2 {
             color: #333;
             margin-bottom: 20px;
         }
+
         .form-input {
             width: 100%;
             padding: 10px;
@@ -35,6 +39,7 @@
             border: 1px solid #ddd;
             box-sizing: border-box;
         }
+
         .form-button {
             width: 100%;
             padding: 10px;
@@ -44,13 +49,16 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .form-button:hover {
             background-color: #555;
         }
+
         .error {
             color: red;
             margin-bottom: 15px;
         }
+
         .speed-dial {
             position: absolute;
             top: 10px;
@@ -58,6 +66,7 @@
             display: flex;
             flex-direction: column;
         }
+
         .speed-dial button {
             margin-bottom: 10px;
             background: none;
@@ -65,9 +74,11 @@
             cursor: pointer;
             font-size: 24px;
         }
+
         .speed-dial button:hover .tooltip {
             visibility: visible;
         }
+
         .tooltip {
             visibility: hidden;
             background-color: black;
@@ -79,11 +90,12 @@
             z-index: 1;
             left: 105%;
             margin-left: 5px;
-            white-space: nowrap; 
-            font-size: 12px; 
-            line-height: 1.2; 
-            max-width: 150px; 
+            white-space: nowrap;
+            font-size: 12px;
+            line-height: 1.2;
+            max-width: 150px;
         }
+
         .popup {
             display: none;
             position: fixed;
@@ -93,18 +105,21 @@
             border: 1px solid #ddd;
             padding: 20px;
             background-color: white;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            border-radius: 10px; 
+            border-radius: 10px;
             text-align: center;
         }
+
         .popup h2 {
             color: #333;
             margin-bottom: 20px;
         }
+
         .popup form {
             text-align: center;
         }
+
         .popup input[type="text"],
         .popup input[type="password"],
         .popup select {
@@ -115,6 +130,7 @@
             border: 1px solid #ddd;
             box-sizing: border-box;
         }
+
         .popup button[type="submit"] {
             width: 100%;
             padding: 10px;
@@ -124,9 +140,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .popup button[type="submit"]:hover {
             background-color: #555;
         }
+
         .overlay {
             display: none;
             position: fixed;
@@ -139,30 +157,31 @@
         }
     </style>
 </head>
+
 <body>
     <div class="speed-dial">
         <button id="createUserButton">
-            &#x2795; 
+            &#x2795;
             <span class="tooltip">Create New User</span>
         </button>
         <button id="simulateUserButton">
-            &#x1F464; 
+            &#x1F464;
             <span class="tooltip">Simulate User</span>
         </button>
     </div>
 
     <div class="login-container">
         <h2>Login</h2>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div class="error">
-              {% for message in messages %}
-                {{ message }}
-              {% endfor %}
-            </div>
-          {% endif %}
+        {% with messages = get_flashed_messages(category_filter=["login_error"]) %}
+        {% if messages %}
+        <div class="error">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
-        <form method="post">
+        <form method="post" action="/login"> 
             <input type="text" name="username" placeholder="Username" class="form-input" required><br>
             <input type="password" name="password" placeholder="Password" class="form-input" required><br>
             <input type="submit" value="Login" class="form-button">
@@ -190,19 +209,20 @@
     </div>
 
     <script>
-        document.getElementById("createUserButton").onclick = function() {
+        document.getElementById("createUserButton").onclick = function () {
             document.getElementById("createUserPopup").style.display = 'block';
             document.getElementById("overlay").style.display = 'block';
         };
-        document.getElementById("simulateUserButton").onclick = function() {
+        document.getElementById("simulateUserButton").onclick = function () {
             document.getElementById("simulateUserPopup").style.display = 'block';
             document.getElementById("overlay").style.display = 'block';
         };
-        document.getElementById("overlay").onclick = function() {
+        document.getElementById("overlay").onclick = function () {
             document.getElementById("createUserPopup").style.display = 'none';
             document.getElementById("simulateUserPopup").style.display = 'none';
             this.style.display = 'none';
         };
     </script>
 </body>
+
 </html>

@@ -67,9 +67,9 @@ def login():
                 session['user_id'] = user[0]
                 return redirect(url_for('view_books'))
             else:
-                flash('Invalid username or password')
+                flash('Invalid username or password', 'login_error')
         except sqlite3.Error as e:
-            flash(str(e))
+            flash(str(e), 'login_error')
     elif request.method == 'GET':
         try:
             conn = sqlite3.connect('books.db')
@@ -90,7 +90,7 @@ def add_book():
     if request.method == 'POST':
         isbn = request.form['isbn']
         if not re.match(r'^\d{10,13}$', isbn):
-            flash('Invalid ISBN format', 'error')
+            flash('Invalid ISBN format', 'add_book_error')
             return render_template('add_book.html')    
         book_details = get_book_details(isbn)
         if book_details:
@@ -100,13 +100,13 @@ def add_book():
                 c.execute("INSERT INTO books (user_id, isbn_10, isbn_13, title, author, page_count, average_rating, thumbnail) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                           (session['user_id'], book_details['isbn_10'], book_details['isbn_13'], book_details['title'], book_details['authors'], book_details['page_count'], book_details['average_rating'], book_details['thumbnail']))
                 conn.commit()
-                flash('Book added successfully', 'success')
+                flash('Book added successfully', 'add_book_success')
             except Exception as e:
-                flash('Failed to add book: ' + str(e), 'error')
+                flash('Failed to add book: ' + str(e), 'add_book_error')
             finally:
                 conn.close()
         else:
-            flash('Failed to retrieve book details', 'error')
+            flash('Failed to retrieve book details', 'add_book_error')
     return render_template('add_book.html')
 
 
@@ -153,22 +153,6 @@ def delete_selected_books():
 
     conn.close()
     return jsonify({'success': True})
-
-@app.route('/search_by_title', methods=['GET', 'POST'])
-def search_by_title():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-
-    if request.method == 'POST':
-        title = request.form['title']
-        response = requests.get(f'https://www.googleapis.com/books/v1/volumes?q=intitle:{title}')
-        if response.status_code == 200:
-            books = response.json().get('items', [])
-            return render_template('search_results.html', books=books)
-        else:
-            flash('Failed to fetch books')
-
-    return render_template('search_by_title.html')
 
 def parse_book_data(data):
     if 'items' in data and data['items']:
@@ -220,4 +204,4 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
