@@ -4,7 +4,6 @@ conn = sqlite3.connect('books.db')
 
 c = conn.cursor()
 
-# Create table for users
 c.execute('''
     CREATE TABLE users (
         id INTEGER PRIMARY KEY,
@@ -13,7 +12,6 @@ c.execute('''
     )
 ''')
 
-# Create table for books
 c.execute('''
     CREATE TABLE books (
         id INTEGER PRIMARY KEY,
@@ -29,7 +27,6 @@ c.execute('''
     )
 ''')
 
-# Insert initial user
 c.execute("INSERT INTO users (username, password) VALUES (?, ?)", ('admin', 'admin'))
 
 conn.commit()
